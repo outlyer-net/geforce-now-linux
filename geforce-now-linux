@@ -1,0 +1,88 @@
+#!/bin/bash
+#
+# A launcher for NVIDIA GeForce NOW on Linux.
+#
+# Copyright (c) 2020 Toni Corvera <outlyer@gmail.com>
+#
+# MIT License at the bottom of this file
+
+# References:
+#  1. https://www.gamingonlinux.com/2020/08/nvidia-geforce-now-adds-chromebook-support-so-you-can-run-it-on-linux-too
+#  2. https://www.gamingonlinux.com/2020/09/nvidia-geforce-now-on-linux-can-run-without-user-agent-spoofing-in-a-browser
+#  3. https://peter.sh/experiments/chromium-command-line-switches/
+#  4. https://www.whatismybrowser.com/guides/the-latest-user-agent/chrome-os
+#  5. https://developers.whatismybrowser.com/useragents/explore/operating_system_name/chrome-os/
+
+# Configuration, tweak as you see fit. 1=On, anything else means Off
+START_MAXIMIZED=1    # Starts maximized but not completely full screen
+START_IN_INCOGNITO=0 # This doesn't seem to have any effect on my system
+START_FULLSCREEN=1   # Starts full screen, toggle with F11
+
+# The first available known chromium browser will be used
+# Reorder if you have a different preference
+# Opera doesn't appear to take the --app option so I'm not including it
+# NOTE: In my tests Chromium gives an error when trying to start a game
+CHROMIUM_VARIANTS=( \
+	google-chrome \
+	microsoft-edge \
+	vivaldi \
+	microsoft-edge-dev \
+	chromium \
+)
+
+# TODO: Match the user agent to the installed version. Probably overkill
+#       The corresponding chrome version is easy (--version) but the CrOS
+#       version probably not so much without a table
+USER_AGENT="Mozilla/5.0 (X11; CrOS x86_64 13020.87.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.119 Safari/537.36"
+
+# --- You probably shouldn't change anything below here ---
+
+# Pick the first variant available
+for variant in ${CHROMIUM_VARIANTS[@]}; do
+	if type -p $variant ; then
+		CHROMIUM=$variant
+		break
+	fi
+done
+
+if [[ -z "$CHROMIUM" ]]; then
+	echo "No known variant of Chromium detected, aborting..." >&2
+	exit 1
+fi
+echo Selected chromium variant: $CHROMIUM >&2
+
+OPTIONS=
+if [[ $START_IN_INCOGNITO = 1 ]]; then
+	OPTIONS+=( "--start-in-incognito" )
+fi
+if [[ $START_MAXIMIZED = 1 ]]; then
+	OPTIONS+=( "--start-maximized" )
+fi
+if [[ $START_FULLSCREEN = 1 ]]; then
+	OPTIONS+=( "--start-fullscreen" )
+fi
+
+echo Running with options: ${OPTIONS[@]} >&2
+
+exec $CHROMIUM --user-agent="$USER_AGENT" ${OPTIONS[@]} \
+	--app=https://play.geforcenow.com
+
+# MIT LICENSE TEXT:
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
