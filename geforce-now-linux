@@ -42,7 +42,7 @@ for variant in ${CHROMIUM_VARIANTS[@]}; do
 	if type -p $variant ; then
 		CHROMIUM=$variant
 		break
-	fi
+	fi >/dev/null
 done
 
 if [[ -z "$CHROMIUM" ]]; then
