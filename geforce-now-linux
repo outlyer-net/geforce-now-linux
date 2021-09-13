@@ -2,7 +2,7 @@
 #
 # A launcher for NVIDIA GeForce NOW on Linux.
 #
-# Copyright (c) 2020 Toni Corvera <outlyer@gmail.com>
+# Copyright (c) 2020-2021 Toni Corvera <outlyer@gmail.com>
 #
 # MIT License at the bottom of this file
 
@@ -36,6 +36,23 @@ CHROMIUM_VARIANTS=( \
 USER_AGENT="Mozilla/5.0 (X11; CrOS x86_64 13020.87.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.119 Safari/537.36"
 
 # --- You probably shouldn't change anything below here ---
+
+
+# Pretty-print 1 (on) and 0 (off) values
+on_off() {
+	local val='off'
+	[[ $1 -eq 0 ]] || val='on'
+	echo $val
+}
+
+cat >&2 <<EOF
+Configuration variables:
+ START_MAXIMIZED:    $(on_off $START_MAXIMIZED)
+ START_IN_INCOGNITO: $(on_off $START_IN_INCOGNITO)
+ START_FULLSCREEN:   $(on_off $START_FULLSCREEN)
+ USER_AGENT:         $USER_AGENT
+ CHROMIUM_VARIANTS:  ${CHROMIUM_VARIANTS[@]}
+EOF
 
 # Pick the first variant available
 for variant in ${CHROMIUM_VARIANTS[@]}; do
