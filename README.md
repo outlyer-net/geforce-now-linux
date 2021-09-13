@@ -14,10 +14,10 @@ The script behaviour can be modified by setting the appropriate environment vari
 
 These are the configurable options:
 
-- `START_MAXIMIZED`: Default: **On**. Starts maximized but not completely full screen
-- `START_IN_INCOGNITO`: Default: **Off**. Starts in incognito mode (note this doesn't appear to work at least on my system)
+- `START_MAXIMIZED`: Default: **On**. Starts maximized but not completely full screen.
+- `START_IN_INCOGNITO`: Default: **Off**. Starts in incognito mode (note this doesn't appear to work at least on my system).
 - `START_FULLSCREEN`: Default: **On**. Starts full screen (no titlebar), exit fullscreen with F11, close with Alt+F4.
-- `CHROMIUM_VARIANTS`: List on browsers to try, in order or preference (see below). \
+- `CHROMIUM_VARIANTS`: List on browsers to try, in order or preference (see [*Supported browsers*](#supported_browsers)). \
     Default: google-chrome, microsoft-edge, vivaldi, microsoft-edge-dev, chromium 
 
 To invoke e.g. neither maximized nor fullscreen:
@@ -27,7 +27,7 @@ $ START_MAXIMIZED=0 START_FULLSCREEN=0 geforce-now-linux
 
 GeForce NOW is launched in *app mode* (i.e. the bowser address bar, tabs and menus aren't shown).
 
-## Supported browsers
+## Supported browsers <a name="supported_browsers"></a>
 
 The script will try to run on the first *Chromium variant* found on the system, so far I've only tested it on Chromium (where it errors upon starting a game) and Google Chrome (where it works). Probably Google Chrome is the safest bet.
 
