@@ -14,21 +14,27 @@
 #  5. https://developers.whatismybrowser.com/useragents/explore/operating_system_name/chrome-os/
 
 # Configuration, tweak as you see fit. 1=On, anything else means Off
-START_MAXIMIZED=1    # Starts maximized but not completely full screen
-START_IN_INCOGNITO=0 # This doesn't seem to have any effect on my system
-START_FULLSCREEN=1   # Starts full screen, toggle with F11
+# NOTE: There's actually no need to edit the script directly, can invoke setting the
+#  variable first, e.g.:
+# > START_MAXIMIZED=0 START_IN_INCOGNITO=1 geforce-now-linux 
+# > CHROMIUM_VARIANTS='chromium microsoft-edge' geforce-now-linux
+START_MAXIMIZED=${START_MAXIMIZED:-1}       # Starts maximized but not completely full screen
+START_IN_INCOGNITO=${START_IN_INCOGNITO:-0} # This doesn't seem to have any effect on my system
+START_FULLSCREEN=${START_FULLSCREEN:-1}     # Starts full screen, toggle with F11
 
 # The first available known chromium browser will be used
-# Reorder if you have a different preference
+# Reorder if you have a different preference, or set the CHROMIUM_VARIANTS environment variable
+# as noted above
 # Opera doesn't appear to take the --app option so I'm not including it
 # NOTE: In my tests Chromium gives an error when trying to start a game
-CHROMIUM_VARIANTS=( \
+declare -ra DEFAULT_CHROMIUM_VARIANTS=( \
 	google-chrome \
 	microsoft-edge \
 	vivaldi \
 	microsoft-edge-dev \
 	chromium \
 )
+CHROMIUM_VARIANTS=${CHROMIUM_VARIANTS:-${DEFAULT_CHROMIUM_VARIANTS[@]}}
 
 # TODO: Match the user agent to the installed version. Probably overkill
 #       The corresponding chrome version is easy (--version) but the CrOS
@@ -81,6 +87,8 @@ fi
 
 echo Running with options: ${OPTIONS[@]} >&2
 
+# NOTE: Can test effective User Agent e.g. directly via Google:
+# https://google.com/search?q=what+is+my+user+agent
 exec $CHROMIUM --user-agent="$USER_AGENT" ${OPTIONS[@]} \
 	--app=https://play.geforcenow.com
 

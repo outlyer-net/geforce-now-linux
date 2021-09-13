@@ -10,12 +10,25 @@ This script launches a chrome browser window with the user agent string modified
 
 ## Options and default behaviour
 
-The script behaviour can be changed by modifying some of the variables set in it. Those are clearly labeled in the script.
+The script behaviour can be modified by setting the appropriate environment variables (or by modifying the script directly).
 
-By default it will run full screen (i.e. the same as pressing F11 on most browsers). The *close window* button won't be shown either, exiting full screen (F11) will display it, while Alt+F4 will close the window on most systems.
+These are the configurable options:
+
+- `START_MAXIMIZED`: Default: **On**. Starts maximized but not completely full screen
+- `START_IN_INCOGNITO`: Default: **Off**. Starts in incognito mode (note this doesn't appear to work at least on my system)
+- `START_FULLSCREEN`: Default: **On**. Starts full screen (no titlebar), exit fullscreen with F11, close with Alt+F4.
+- `CHROMIUM_VARIANTS`: List on browsers to try, in order or preference (see below). \
+    Default: google-chrome, microsoft-edge, vivaldi, microsoft-edge-dev, chromium 
+
+To invoke e.g. neither maximized nor fullscreen:
+```shell
+$ START_MAXIMIZED=0 START_FULLSCREEN=0 geforce-now-linux
+```
 
 GeForce NOW is launched in *app mode* (i.e. the bowser address bar, tabs and menus aren't shown).
 
 ## Supported browsers
 
 The script will try to run on the first *Chromium variant* found on the system, so far I've only tested it on Chromium (where it errors upon starting a game) and Google Chrome (where it works). Probably Google Chrome is the safest bet.
+
+Note Opera doesn't appear to support *app mode*, so it isn't included in the list.
