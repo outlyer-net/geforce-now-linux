@@ -18,9 +18,10 @@
 #  variable first, e.g.:
 # > START_MAXIMIZED=0 START_IN_INCOGNITO=1 geforce-now-linux 
 # > CHROMIUM_VARIANTS='chromium microsoft-edge' geforce-now-linux
-START_MAXIMIZED=${START_MAXIMIZED:-1}       # Starts maximized but not completely full screen
-START_IN_INCOGNITO=${START_IN_INCOGNITO:-0} # This doesn't seem to have any effect on my system
-START_FULLSCREEN=${START_FULLSCREEN:-1}     # Starts full screen, toggle with F11
+START_MAXIMIZED=${START_MAXIMIZED:-1}         # Starts maximized but not completely full screen
+START_IN_INCOGNITO=${START_IN_INCOGNITO:-0}   # This doesn't seem to have any effect on my system
+START_FULLSCREEN=${START_FULLSCREEN:-1}       # Starts full screen, toggle with F11
+OVERRIDE_USER_AGENT=${OVERRIDE_USER_AGENT:-0} # Pretend to be running under ChromeOS
 
 # The first available known chromium browser will be used
 # Reorder if you have a different preference, or set the CHROMIUM_VARIANTS environment variable
@@ -50,14 +51,20 @@ on_off() {
 	echo $val
 }
 
+ua=$USER_AGENT
+if [[ $OVERRIDE_USER_AGENT -ne 1 ]]; then
+	ua="(Browser's user agent)"
+fi
 cat >&2 <<EOF
 Configuration variables:
- START_MAXIMIZED:    $(on_off $START_MAXIMIZED)
- START_IN_INCOGNITO: $(on_off $START_IN_INCOGNITO)
- START_FULLSCREEN:   $(on_off $START_FULLSCREEN)
- USER_AGENT:         $USER_AGENT
- CHROMIUM_VARIANTS:  ${CHROMIUM_VARIANTS[@]}
+ START_MAXIMIZED:     $(on_off $START_MAXIMIZED)
+ START_IN_INCOGNITO:  $(on_off $START_IN_INCOGNITO)
+ START_FULLSCREEN:    $(on_off $START_FULLSCREEN)
+ OVERRIDE_USER_AGENT: $(on_off $OVERRIDE_USER_AGENT)
+ USER_AGENT:          $ua
+ CHROMIUM_VARIANTS:   ${CHROMIUM_VARIANTS[@]}
 EOF
+unset ua
 
 # Pick the first variant available
 for variant in ${CHROMIUM_VARIANTS[@]}; do
@@ -84,11 +91,15 @@ if [[ $START_FULLSCREEN = 1 ]]; then
 	OPTIONS+=( "--start-fullscreen" )
 fi
 
-echo Running with options: ${OPTIONS[@]} >&2
+if [[ $OVERRIDE_USER_AGENT -eq 1 ]]; then
+	OPTIONS+=( "--user-agent=$USER_AGENT" )
+fi
+
+echo Running with options: "${OPTIONS[@]}" >&2
 
 # NOTE: Can test effective User Agent e.g. directly via Google:
 # https://google.com/search?q=what+is+my+user+agent
-exec $CHROMIUM --user-agent="$USER_AGENT" ${OPTIONS[@]} \
+exec $CHROMIUM "${OPTIONS[@]}" \
 	--app=https://play.geforcenow.com
 
 # MIT LICENSE TEXT:

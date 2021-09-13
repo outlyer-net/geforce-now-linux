@@ -2,11 +2,17 @@
 
 A launcher for NVIDIA GeForce NOW on Linux.
 
-GeForce NOW doesn't offer support for Linux but it does offer support for Chrome OS through the browser. As commented on [this article](https://www.gamingonlinux.com/2020/08/nvidia-geforce-now-adds-chromebook-support-so-you-can-run-it-on-linux-too), since Chrome OS is based on Linux this means it can be exploited to run on Linux.
+Please there's no longer a need for hacks to run GeForce NOW on Linux since NVIDIA enabled access to the service via Chrome.
+\
+As a consequence this script no longer spoofs the browser user agent by default anymore (i.e. it no longer pretends to run under ChromeOS unless explicitly told to). However the original behaviour can be enabled by setting the corresponding variable.
+\
+It's still somewhat useful since it launches in app mode, feeling more like the native app on other OSes. 
 
-This script launches a chrome browser window with the user agent string modified to *look* like it's running on Chrome OS.
+### Original motivation
 
-**DISCLAIMER**: Use at your own risk, NVIDIA might decide to prevent Linux users from accessing the service or start relying on some Chrome OS-specific feature that breaks this script. Don't subscribe to GeForce NOW solely based on the fact this method exists!
+Previously GeForce NOW didn't offer support for Linux but did support Chrome OS through the browser. As commented on [this article](https://www.gamingonlinux.com/2020/08/nvidia-geforce-now-adds-chromebook-support-so-you-can-run-it-on-linux-too), since Chrome OS is based on Linux this meant it could be exploited to run on Linux.
+
+This script originally launched a chrome browser window with the user agent string modified to *look* like it was running on Chrome OS.
 
 ## Options and default behaviour
 
@@ -17,6 +23,7 @@ These are the configurable options:
 - `START_MAXIMIZED`: Default: **On**. Starts maximized but not completely full screen.
 - `START_IN_INCOGNITO`: Default: **Off**. Starts in incognito mode (note this doesn't appear to work at least on my system).
 - `START_FULLSCREEN`: Default: **On**. Starts full screen (no titlebar), exit fullscreen with F11, close with Alt+F4.
+- `OVERRIDE_USER_AGENT`: Default: **Off**. Pretend to be running under ChromeOS via the User Agent string.
 - `CHROMIUM_VARIANTS`: List on browsers to try, in order or preference (see [*Supported browsers*](#supported_browsers)). \
     Default: google-chrome, microsoft-edge, vivaldi, microsoft-edge-dev, chromium 
 
