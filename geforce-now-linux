@@ -43,7 +43,6 @@ USER_AGENT="Mozilla/5.0 (X11; CrOS x86_64 13020.87.0) AppleWebKit/537.36 (KHTML,
 
 # --- You probably shouldn't change anything below here ---
 
-
 # Pretty-print 1 (on) and 0 (off) values
 on_off() {
 	local val='off'
